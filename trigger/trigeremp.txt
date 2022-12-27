@@ -1,0 +1,27 @@
+Set A 
+Q2
+Create trigger mno 
+Before insert on emp23
+For each row execute procedure check_curdate() ;
+
+Create or replace function check_curdate() returns trigger as'
+Begin
+  If current_date < new. joining_date then
+       Raise exception ''unvalid date is enter '';
+End if;
+Return new;
+End;
+'Language 'plpgsql';
+
+
+Create trigger pk
+Before delete on emp
+For each row execute procedure  fun1() ;
+
+Create or replace function fun1()  returns  trigger as '
+Declare
+Begin
+        Raise notice ''row is delete successfully'';
+Return old;
+End;
+'Language  'plpgsql';

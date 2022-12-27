@@ -1,0 +1,95 @@
+create or replace function fun3(cla varchar(30)) returns int as 
+'
+declare 
+  c1 cursor for select * from s ;
+  c2 cursor for select * from t_s;
+   r1 s%rowtype;
+   r2 t_s%rowtype;
+    cnt int :=0;
+begin
+     open c1;
+        loop
+          fetch c1 into r1;
+     exit when not found;
+         if r1.class = cla then 
+            open c2;
+               loop
+                  fetch c2 into r2;
+               exit when not found;
+                 if r1. sno = r2. sno then
+                     raise notice ''% % % '', r1. sname, r2. sub, r2. mark;
+    cnt := cnt + 1;
+                  end if;
+               end loop;
+            close c2;
+        end if;
+        end loop;
+     close c1;
+return cnt;
+end;
+'language 'plpgsql';
+
+
+create or replace function fun2(s_no int)  returns int  as '
+declare
+c1 cursor for select * from s ;
+c2 cursor for select * from t_s;
+c3 cursor for select * from t;
+r1 s%rowtype;
+r2  t_s%rowtype;
+r3 t%rowtype;
+cnt int:=0;
+begin
+  open c1;
+   loop
+     fetch c1 into r1;
+      exit when not found;
+      if r1. sno=s_no then
+        open c2;
+         loop
+           fetch c2 into r2;
+            exit when not found;
+             if r2.sub = ''RDBMS'' then 
+                    if r2. sno= r1. sno then
+                 open c3 ;
+                    loop
+                      fetch c3 into r3;
+                         exit when not found;
+                         if r3.tno = r2. tno then
+                            raise notice '' % % % '', r1. sname, r2.sub, r3. tname;
+cnt := cnt +1;
+                        end if;
+                    end loop;
+                 close c3;
+               end if;
+             end if;
+         end loop;
+        close c2;
+      end if;
+   end loop;
+  close c1;
+end;
+'language 'plpgsql';  
+
+
+create or replace function fun4() returns int as
+'
+declare
+  c1 cursor for select *  from t;
+  r1 t%rowtype;
+  cnt int :=0;
+  exp int :=10;
+begin
+   open c1;
+      loop
+        fetch c1 into r1;
+   exit when not found;
+            if r1. experience > exp then 
+     raise notice '' % % % % '', r1. tno, r1. tname, r1. qua, r1. experience ;
+cnt := cnt +1;
+ end if;
+     end loop;
+   close c1;
+return cnt;
+end;
+'Language 'plpgsql';

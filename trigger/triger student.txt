@@ -1,0 +1,44 @@
+Set A 
+Q1
+Create  trigger demo 
+Before insert  on stu1
+For each row execute procedure fun() ;
+
+Create or replace function fun()  returns trigger as'
+Declare 
+Begin 
+   If new.sno<=0  then
+ Raise exception ''sno is no be negative'';
+End if;
+Return new;
+End;
+'Language 'plpgsql';
+
+
+
+Create trigger abc
+Before update on stu1 
+For each row execute procedure fun1() ;
+
+Create or replace function fun1() returns trigger  as '
+Declare
+Begin
+    Raise notice ''update successful'';
+    Return new;
+End;
+'Language 'plpgsql';  
+
+
+Create trigger xyz 
+Before insert on tea
+For each row execute procedure fun3() ;
+
+Create or replace function fun3() returns trigger as'
+Begin
+ If min(new.experience) <= 2 then
+      Raise notice ''experience is greter or equal to 2'';
+Return null;
+end if;
+Return new ;
+End;
+'Language 'plpgsql';
